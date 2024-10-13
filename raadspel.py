@@ -1,58 +1,98 @@
-# Vebeterpunten:
-# - Haal onnodig comments weg
-# - zorg dat je game opnieuwe weer start
-# - zorg dat je communicatie met de user duidelijker is
-# - gebruik de /n op nieuwe regel aan te maken
-# - gebruik kleur code op je spelletje leuker te ma
-
 import random
+from colorama import Fore, Style, init
 
-# Bij deze stap groet ik de user en vraag ik of ze klaar zijn om te spellen.
+
+def start_game():
+    print("Begin het raadspel!")
+
+init()
+
+def print_title():
+    title = "WIN THE NUMBER GAME"
+    print("\n" + "=" * 40)
+    print(Fore.MAGENTA + title.center(40) + Style.RESET_ALL)
+    print("=" * 40 + "\n")
+
+
 def guess_number():
+    print_title()
 
-    print("Welcome to the win the number game, are you ready? (yes or no)")
+    print(Fore.MAGENTA + "BEN JE KLAAR OM TE SPELEN? JA OF NEE" + Style.RESET_ALL)
 
     ready = input().strip().lower()
-    # Met deze stap kan ik bepalen wat ik moet zeggen als de user "nee" aangeeft op vraag of ze willen spellen.
-    if ready == "no":
+    print("\n")
 
-        print("Alright, that is fine. See you next time!")
+    if ready == "nee":
+        print(Fore.WHITE + "Geen probeleem, Tot de volgende keer!" + Style.RESET_ALL)
         return
-    #Met deze stap kan ik bepalen wat ik moet zeggen als de user "ja" als antwoord geeft op mijn vraag of ze willen spellen.
-    if ready == "yes":
-        print("Yay, let's play the game")
-        # In het volgende stuk van 17 tot met 19 leg ik de user uit wat de regels zijn en wat ik ga betekenen voor hun in het spel.
-        # Important information!
-        print("But before you play, I have important information you must remember!")
-        print("You can only guess 5 times; if you run out of chances, the game will end.")
-        print("Each guess I will let you know if the number is too high or too low.")
-        # Bij het volgende stukje vraag ik de user om een getal te raden binnen een bepaalde range.
-        print("Try to guess a number between 1 & 50")
 
-        random_number = random.randint(1, 50) # Met deze functie zal de systeem ervoor zorgen dat de raadnummer tussen de 1 en 50 zal blijven en dat het hier tussen willekeurig uitgekozen worden.
-        max_attempts = 5 # Met deze functie zal de maximaal pogingen op 5 belijven.
-# Met deze functie word ervoor gezorgd dat de loop tot maximaal 5 poging loopt.
-        for attempt in range(max_attempts):
-            try:
-                guess = int(input("Please enter the number: ")) # Met deze functie vraag ik de user om het getal in te voeren.                 # Met deze functie zal het systeem controleren of de ingevoerde getal gelijk is aan de willekeurig getal van het systeem.
-                if guess < random_number: # Met dit stukje laat ik de user weten dat het getal dat ze hebben ingevoerd te hoog is bij 31.
-                    print("Oops, it's too low. Try again!")
-                elif guess > random_number: # Met dit stukje laat ik de user weten dat het getal dat ze hebben ingevoerd te hoog is.
-                    print("Oops, it's too high. Try again!")
-                else: # Met dit stukje feliciteer ik de user als ze juist antwoord hebben.
-                    print("Yay, you guessed it right. Good job!")
-                    break # met deze functie zal het speletje stoppen als de user het goed heeft geraden.
-#
-            except ValueError:
-                print("Please enter a valid number.")
-# Als alle kansen op zijn zal de user het volgende krijgen:
-        else:
-            print("Oh no, you have used all your chances! The correct number was:", random_number)
-# Als de user iets verkeerd invult anders dan "ja" en "nee" krijgen ze deze tekst.
+    if ready == "ja":
+        print(Fore.YELLOW + "=" * 40)
+        print("Voordat we spelen, hier is wat informatie over het spel:\n")
+        print("Bij 'WIN THE NUMBER GAME' heb je in totaal 6 kansen om een nummer tussen 1 en 50 te raden.")
+        print("Het spel laat je weten of het nummer te hoog of te laag is en hoeveel kansen je nog over hebt.")
+        print("Aan het einde van het spel heb je de optie om opnieuw te spelen of te stoppen.\n")
+        print("Veel succes met het spel en veel plezier!\n")
+        print("=" * 40 + Style.RESET_ALL + "\n")
+
+        while True:
+            random_number = random.randint(1, 50)
+            max_attempts = 6
+            attempt = 0
+
+            while attempt < max_attempts:
+                try:
+                    guess = int(input(
+                        Fore.MAGENTA + "Voer een nummer tussen 1 en 50 in: " + Style.RESET_ALL))
+
+                    if guess < 1 or guess > 50:
+                        print(Fore.RED + "Ongeldig nummer. Voer een nummer tussen 1 en 50 in." + Style.RESET_ALL)
+                        print("\n")
+                        continue
+
+
+                    if guess < random_number:
+                        attempt += 1
+                        remaining_attempts = max_attempts - attempt
+                        print(Fore.MAGENTA + f"Te laag! Je hebt {remaining_attempts} kansen over." + Style.RESET_ALL)
+                    elif guess > random_number:
+                        attempt += 1
+                        remaining_attempts = max_attempts - attempt
+                        print(Fore.MAGENTA + f"Te hoog! Je hebt {remaining_attempts} kansen over." + Style.RESET_ALL)
+                    else:
+                        print(Fore.MAGENTA + "Gefeliciteerd! Je hebt het juiste nummer geraden!" + Style.RESET_ALL)
+                        break
+
+                    print("\n" + "-" * 40 + "\n")
+
+                except ValueError:
+                    print(Fore.RED + "Voer alstublieft een geldig geheel getal in." + Style.RESET_ALL)
+                    print("\n")
+                    continue
+
+            else:
+                print(Fore.RED + f"Spel afgelopen! Je hebt al je kansen gebruikt. Het juiste nummer was: {random_number}" + Style.RESET_ALL)
+
+            print("\n" + "=" * 40 + "\n")
+
+
+            while True:
+                print(Fore.MAGENTA + "Wil je opnieuw spelen? (1 voor Ja, 2 voor Nee): " + Style.RESET_ALL)
+                play_again = input().strip()
+
+                if play_again == "1":
+                    break
+                elif play_again == "2":
+                    print(Fore.YELLOW + "Bedankt voor het spelen! Tot ziens!" + Style.RESET_ALL)
+                    return
+                else:
+                    print(Fore.RED + "Ongeldige invoer. Kies '1' voor Ja of '2' voor Nee." + Style.RESET_ALL)
+                    print("\n")
+
     else:
-        print("Invalid response. Please enter 'yes' or 'no'.")
+        print(Fore.RED + "Ongeldige reactie. Voer 'ja' of 'nee' in." + Style.RESET_ALL)
         guess_number()
 
 
-# main
+
 guess_number()
